@@ -1,0 +1,209 @@
+{
+  "mappings": {
+    "_default_": {
+      "_all": {
+        "enabled": true,
+        "norms": {
+          "enabled": false
+        }
+      },
+      "dynamic_templates": [
+        {
+          "template1": {
+            "mapping": {
+              "doc_values": true,
+              "ignore_above": 1024,
+              "index": "not_analyzed",
+              "type": "{dynamic_type}"
+            },
+            "match": "*"
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "message": {
+          "type": "string",
+          "index": "analyzed"
+        },
+	"id": {
+          "type": "string",
+          "index": "analyzed"
+        },
+        "offset": {
+          "type": "long",
+          "doc_values": "true"
+        },
+        "bytes_per_second" : {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "time_duration": {
+          "type" : "double",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "input_byte" : {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"input_byte_flowpro" : {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"rate" : {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "output_byte" : {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "as_byte" : {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        }, 
+        "input_packet": {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+
+        "output_packet": {
+          "type" : "long",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "sas": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"as_sas": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"as_das": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "das": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "in": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "out": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "date_start": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "date_start_flowpro": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"as_date": {
+          "type": "date",
+          "format": "dd-MM-yyyy",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "date_end": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "source_ip": {
+          "type" : "ip",
+          "doc_values": true
+        },
+	"source_ip_flowpro": {
+          "type" : "ip",
+          "doc_values": true
+        },
+        "source_port": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"source_port_flowpro": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "dest_ip": {
+          "type" : "ip",
+          "doc_values": true
+        },
+	"dest_ip_flowpro": {
+          "type" : "ip",
+          "doc_values": true
+        },
+        "dest_port": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"dest_port_flowpro": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "stos": {
+          "type" : "integer",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "td": {
+          "type" : "double",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"duration": {
+          "type" : "double",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+	"time_start": {
+          "type": "date",
+          "format": "HH:mm:ss",
+          "doc_values": true,
+          "index": "not_analyzed"
+        },
+        "protocol": {
+          "type" : "string"
+        },
+	"protocol_flowpro": {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "settings": {
+    "index.refresh_interval": "5s"
+  },
+  "template": "filebeat-*"
+}

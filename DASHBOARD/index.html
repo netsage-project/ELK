@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+		<!-- Include Date Range Picker -->
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<title>Netflow Dashboard</title>
+
+	<link rel="stylesheet" href="assets/demo.css">
+	<link rel="stylesheet" href="assets/form-basic.css">
+
+</head>
+
+
+	<header>
+		<h1>Netflow Dashboard</h1>
+    </header>
+
+<body>
+
+    <div class="main-content">
+
+        <!-- You only need this form and the form-basic.css -->
+
+        <form class="form-basic" method="post" action="#">
+
+            <div class="form-title-row">
+                <h1>Kibana Interface</h1>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>Search </span>
+                    <input type="text" name="search" placeholder="Eg - 128.151.79.1, >500" style="width: 400px">
+                </label>
+            </div>
+
+			<div id="add_field">	            
+	            <div class="form-row">
+	                <label>
+	                    <span>Field</span>
+	                    <select name="search_parameter">
+	                        <option value="source_ip">Source or Destination IP</option>
+	                        <option value="source_port">Source or Destination Port</option>
+	                        <option value="sas">Source or Destination AS</option>	                        
+	                        <option value="protocol">Protocol</option>
+	                        <option value="input_byte">Input Bytes</option>
+	                    </select>
+	                </label>
+	            </div>
+	        </div>
+
+            <div class="form-row">
+                <button type="button" value="submit" onclick="foo();" style="margin-left: 280px">Submit</button>
+				<button type="button" value="submit" onclick="parse();" style="margin-left: 20px">Parse</button>
+            </div>
+            <div class="form-row">
+
+            </div>
+            <hr>
+
+            <div class="form-row">
+                <label>
+                    <span>Source IP</span>
+                    <input type="text" name="s_ip" id="s_ip" placeholder="Eg - 128.151.79.1">
+                    <span>Source Port</span>
+                    <input type="text" name="s_port" id="s_port" placeholder="Eg - 33001">
+                </label>
+                <label>
+                    <span>Destination IP</span>
+                    <input type="text" name="d_ip" id="d_ip" placeholder="Eg - 128.151.79.1">
+                    <span>Destination Port</span>
+                    <input type="text" name="d_port" id="d_port" placeholder="Eg - 64067">
+                </label>
+            </div>
+
+
+            <div class="form-row">
+                <label>
+                    <span>Source AS</span>
+                    <input type="text" name="s_as" placeholder="Eg - 22388">
+                </label>
+                <label>
+                    <span>Destination AS</span>
+                    <input type="text" name="d_as" placeholder="Eg - 1237">
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label>
+                    <span>Protocol </span>
+                    <input type="text" name="protocol" id="protocol" placeholder="Eg - TCP">
+                </label>
+            </div>
+
+            <div class="form-row">
+                <label><span>Viz</span></label>
+                <div class="form-radio-buttons">
+
+                    <div>
+                        <label>
+                            <input type="radio" name="radio" value="1" checked>
+                            <span style="margin-right: 15px">Search Flows</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="radio" value="2">
+                            <span style="margin-right: 15px">View Flow Profile</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="radio" value="3">
+                            <span>View AS Aggregation</span>
+                        </label>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    <span>Time Period</span>
+                </label>
+	                <input type="text" name="date_from" placeholder="From" />
+		            <input type="text" name="date_to" placeholder="To" />
+            </div>
+
+
+	<SCRIPT type=text/javascript>
+		function foo()
+		{
+			var s_ip = document.getElementsByName('s_ip')[0].value 
+			var d_ip = document.getElementsByName('d_ip')[0].value
+			var s_port = document.getElementsByName('s_port')[0].value
+			var d_port = document.getElementsByName('d_port')[0].value
+			var s_as = document.getElementsByName('s_as')[0].value
+			var d_as = document.getElementsByName('d_as')[0].value
+			var date_from = document.getElementsByName('date_from')[0].value
+			var date_to = document.getElementsByName('date_to')[0].value
+			var viz = document.querySelector('input[name="radio"]:checked').value;
+			var url = '156.56.6.121';
+			var search = document.getElementsByName('search')[0].value   
+			var search_parameter = document.getElementsByName('search_parameter')[0].value
+			var proto = document.getElementsByName('protocol')[0].value   
+			//if (s_ip !== "" && d_ip !== "") {
+			//	alert(s_ip)
+			//} 
+
+			
+
+			if (search !="" && date_from!="" && date_to!="" &&search_parameter == "source_ip" && viz == 1) {
+				var url = "https://156.56.6.121/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(columns:!(source_ip,source_port,dest_ip,dest_port,td,input_byte,protocol),filters:!(),index:'filebeat-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'source_ip:"+search+"%20%20OR%20dest_ip:"+search+"')),sort:!(date_start,desc),vis:(aggs:!((params:(field:dest_port,orderBy:'2',size:20),schema:segment,type:terms),(id:'2',schema:metric,type:count)),type:histogram))&indexPattern=filebeat-*&type=histogram"
+
+				//alert(url)
+				window.open(url,'_blank');
+
+
+			}
+
+			else if (search !="" && date_from!="" && date_to!="" && search_parameter == "source_port" && viz == 1) {
+				var url = "https://156.56.6.121/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(columns:!(source_ip,source_port,dest_ip,dest_port,td,input_byte,protocol),filters:!(),index:'filebeat-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'source_port:"+search+"%20%20OR%20dest_port:"+search+"')),sort:!(date_start,desc),vis:(aggs:!((params:(field:dest_port,orderBy:'2',size:20),schema:segment,type:terms),(id:'2',schema:metric,type:count)),type:histogram))&indexPattern=filebeat-*&type=histogram"
+
+				//alert(url)
+				window.open(url,'_blank');
+
+
+			}	
+
+			else if (search !="" && date_from!="" && date_to!="" && search_parameter == "sas" && viz == 1) {
+				var url = "https://156.56.6.121/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(columns:!(source_ip,source_port,dest_ip,dest_port,td,input_byte,protocol),filters:!(),index:'filebeat-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'sas:"+search+"%20%20OR%20das:"+search+"')),sort:!(date_start,desc),vis:(aggs:!((params:(field:dest_port,orderBy:'2',size:20),schema:segment,type:terms),(id:'2',schema:metric,type:count)),type:histogram))&indexPattern=filebeat-*&type=histogram"
+
+				//alert(url)
+				window.open(url,'_blank');
+
+
+			}	
+
+			else if (search !="" && date_from!="" && date_to!="" && search_parameter == "protocol" && viz == 1) {
+
+				var url = "https://156.56.6.121/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(columns:!(source_ip,source_port,dest_ip,dest_port,td,input_byte,protocol),filters:!(),index:'filebeat-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'"+search_parameter+":"+search+"')),sort:!(date_start,desc),vis:(aggs:!((params:(field:dest_port,orderBy:'2',size:20),schema:segment,type:terms),(id:'2',schema:metric,type:count)),type:histogram))&indexPattern=filebeat-*&type=histogram"
+
+				//alert(url)
+				window.open(url,'_blank');
+
+
+			}
+			else if (search !="" && date_from!="" && date_to!="" && search_parameter == "input_byte" && viz == 1) {
+
+				var url = "https://156.56.6.121/app/kibana#/discover?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(columns:!(source_ip,source_port,dest_ip,dest_port,td,input_byte,protocol),filters:!(),index:'filebeat-*',interval:auto,query:(query_string:(analyze_wildcard:!t,query:'"+search_parameter+":"+search+"')),sort:!(date_start,desc),vis:(aggs:!((params:(field:dest_port,orderBy:'2',size:20),schema:segment,type:terms),(id:'2',schema:metric,type:count)),type:histogram))&indexPattern=filebeat-*&type=histogram"
+
+				//alert(url)
+				window.open(url,'_blank');
+
+
+			}	
+
+			else if(s_as !="" && date_from!="" && date_to!="" && d_as !="" && viz == 3 ){
+
+				//document.getElementsByName("search").disabled = isDisabled;
+
+				var url = "https://156.56.6.121/app/kibana#/visualize/edit/AS-Aggregation?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),uiState:(),vis:(aggs:!((id:'1',params:(field:as_byte),schema:metric,type:sum),(id:'2',params:(customInterval:'2h',extended_bounds:(),field:date_start,interval:auto,min_doc_count:1),schema:segment,type:date_histogram),(id:'3',params:(filters:!((input:(query:(query_string:(analyze_wildcard:!t,query:'as_sas:"+s_as+"%20%26%26%20as_das:"+d_as+"'))),label:'From%20nasa%20to%20UC%20Berkeley'))),schema:group,type:filters)),listeners:(),params:(addLegend:!t,addTimeMarker:!f,addTooltip:!t,defaultYExtents:!f,mode:stacked,scale:linear,setYExtents:!f,shareYAxis:!t,times:!(),yAxis:()),title:'AS%20Aggregation',type:histogram))"
+				window.open(url,'_blank');
+				//alert(url)
+			}
+
+			else if(s_ip !="" && date_from!="" && date_to!="" && d_ip !="" && s_port !="" && d_port !="" && proto !="" && viz == 2 ){
+				var url = "https://156.56.6.121/app/kibana#/visualize/edit/FlowProfile?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:'"+date_from+"T04:00:00.000Z',mode:absolute,to:'"+date_to+"T04:00:00.000Z'))&_a=(filters:!(),linked:!f,query:(query_string:(analyze_wildcard:!t,query:'*')),uiState:(),vis:(aggs:!((id:'1',params:(field:bytes_per_second),schema:metric,type:avg),(id:'2',params:(customInterval:'2h',extended_bounds:(),field:date_start,interval:m,min_doc_count:1),schema:segment,type:date_histogram),(id:'3',params:(filters:!((input:(query:(query_string:(analyze_wildcard:!t,query:'source_ip_flowpro:"+s_ip+"%20%26%26%20dest_ip_flowpro:"+d_ip+"%20%26%26%20source_port_flowpro:"+s_port+"%20%26%26%20dest_port_flowpro:"+d_port+"%20%26%26%20protocol_flowpro:"+proto+"'))),label:''))),schema:group,type:filters)),listeners:(),params:(addLegend:!t,addTimeMarker:!f,addTooltip:!t,defaultYExtents:!f,drawLinesBetweenPoints:!t,interpolate:linear,radiusRatio:9,scale:linear,setYExtents:!f,shareYAxis:!t,showCircles:!t,smoothLines:!f,times:!(),yAxis:()),title:FlowProfile,type:line))"
+				window.open(url,'_blank');
+				//alert(url)
+			}
+
+			else {
+				alert(search + " Validation Error. Check fields.")	
+			}
+
+		}
+
+
+
+		function add() {
+
+			//Create an input type dynamically.
+			var element = document.createElement("input");
+
+			//Create Labels
+			var label = document.createElement("Label");
+			label.innerHTML = "Search 2";     
+
+			//Assign different attributes to the element.
+			element.setAttribute("type", "text");
+			element.setAttribute("class", "input-lg");
+			element.setAttribute("name", "search2");
+
+			//label.setAttribute("style", "font-weight:normal");
+
+			// 'foobar' is the div id, where new fields are to be added
+			var foo = document.getElementById("add_field");
+
+			//Append the element in page (in span).
+			foo.appendChild(label);
+			foo.appendChild(element);
+		}
+
+
+		function parse() {
+			//
+			var parsed = document.getElementsByName('search')[0].value;
+			var stripped = parsed.split("\t");
+			var sip = stripped[0];
+			var dip = stripped[2];
+			var sport = stripped[1];
+			var dport = stripped[3];
+			var proto = stripped[6];
+			document.getElementById("s_ip").value = sip;
+			document.getElementById("d_ip").value = dip;
+			document.getElementById("s_port").value = sport;
+			document.getElementById("d_port").value = dport;
+			document.getElementById("protocol").value = proto;
+			//alert(proto);
+		}
+
+
+	</SCRIPT>
+
+		<script>
+	    $(document).ready(function(){
+	        var date_input=$('input[name="date_from"]');
+	        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+	        date_input.datepicker({
+	            format: 'yyyy-mm-dd',
+	            container: container,
+	            todayHighlight: true,
+	            autoclose: true,
+	        })
+	    })
+
+	    $(document).ready(function(){
+	        var date_input_to=$('input[name="date_to"]');
+	        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+	        date_input_to.datepicker({
+	            format: 'yyyy-mm-dd',
+	            container: container,
+	            todayHighlight: true,
+	            autoclose: true,
+	        })
+	    })
+	</script>
+
+
+            <div class="form-row">
+                <button type="button" value="submit" onclick="foo();" style="margin-left: 300px">Submit</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>
+

@@ -1,0 +1,38 @@
+filebeat:
+  prospectors:
+     -
+      paths:
+        - /mnt/ssd2/rawdata/2017/StitchedFlows/Stitched2017/*.csv
+      document_type: netflowOneDay
+     -
+      paths:
+        - /mnt/ssd2/rawdata/2016/ASDATA/processedAggregatedData/Archive/*.csv
+      document_type: asaggregation
+     -
+      paths:
+        - /home/elkdata/files/flowprofile/*.csv
+      document_type: flowprofile
+     -
+      paths:
+        - /home/elkdata/files/tuple/*.csv
+      document_type: flowprofile_tuple
+     
+  registry_file: /var/lib/filebeat/registry
+      
+output:
+  logstash:
+    hosts: ["127.0.0.1:5044"]
+    bulk_max_size: 5000
+
+    tls:
+      certificate_authorities: ["/etc/pki/tls/certs/logstash-forwarder.crt"]
+
+shipper:
+
+logging:
+    to_files: true
+    files:
+      path: /var/log/filebeat/
+      name: filebeat_eslogs.log
+      rotateeverybytes: 10485760 # = 10MB
+    level: info
